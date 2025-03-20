@@ -63,6 +63,10 @@
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
+        .download-btn {
+            display: none;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -75,17 +79,20 @@
     value="https://abhishekmn1999.github.io/dynamic_QR_Code/redirect.html">
 
     <button onclick="generateQRCode()">Generate QR Code</button>
-
     <div id="qrcode"></div>
+
+    <button id="downloadBtn" class="download-btn" onclick="downloadQRCode()">Download QR Code</button>
 </div>
 
 <script>
 function generateQRCode() {
     const url = document.getElementById('redirectUrl').value;
     const qrDiv = document.getElementById('qrcode');
+    const downloadBtn = document.getElementById('downloadBtn');
+
     qrDiv.innerHTML = '';  // Clear previous QR code
 
-    new QRCode(qrDiv, {
+    const qrCode = new QRCode(qrDiv, {
         text: url,
         width: 250,
         height: 250,
@@ -93,6 +100,24 @@ function generateQRCode() {
         colorLight: "#ffffff",
         correctLevel: QRCode.CorrectLevel.H
     });
+
+    // Wait for QR code to render, then show the download button
+    setTimeout(() => {
+        downloadBtn.style.display = 'block';
+    }, 500);
+}
+
+function downloadQRCode() {
+    const canvas = document.querySelector('#qrcode canvas');
+    
+    if (canvas) {
+        const link = document.createElement('a');
+        link.download = 'QRCode.png';
+        link.href = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+        link.click();
+    } else {
+        alert("Please generate a QR code first!");
+    }
 }
 </script>
 
