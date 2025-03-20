@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Awesome Dynamic QR Code</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+        }
+        h1 {
+            color: #333;
+            font-size: 28px;
+        }
+        label, input, button, select {
+            margin: 10px 0;
+            display: block;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        input, select {
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: 0.3s;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        #qrcode {
+            margin: 20px auto;
+            display: flex;
+            justify-content: center;
+        }
+        .btn-group {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        .btn-group button {
+            flex: 1;
+        }
+        canvas {
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Awesome Dynamic QR Code</h1>
+
+    <label for="redirectUrl">Redirect URL:</label>
+    <input type="text" id="redirectUrl" placeholder="Enter the redirect page URL" value="https://yourdomain.com/redirect.html">
+
+    <label for="color">QR Code Color:</label>
+    <input type="color" id="color" value="#000000">
+
+    <label for="bgColor">Background Color:</label>
+    <input type="color" id="bgColor" value="#ffffff">
+
+    <div class="btn-group">
+        <button onclick="generateQRCode()">Generate</button>
+        <button onclick="downloadQRCode()">Download</button>
+    </div>
+
+    <div id="qrcode"></div>
+</div>
+
+<script>
+function generateQRCode() {
+    const url = document.getElementById('redirectUrl').value;
+    const color = document.getElementById('color').value;
+    const bgColor = document.getElementById('bgColor').value;
+    const qrDiv = document.getElementById('qrcode');
+    
+    qrDiv.innerHTML = '';  // Clear previous QR code
+
+    const qrCode = new QRCode(qrDiv, {
+        text: url,
+        width: 250,
+        height: 250,
+        colorDark: color,
+        colorLight: bgColor,
+        correctLevel: QRCode.CorrectLevel.H
+    });
+}
+
+function downloadQRCode() {
+    const canvas = document.querySelector('#qrcode canvas');
+    if (canvas) {
+        const link = document.createElement('a');
+        link.download = 'qr-code.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+    } else {
+        alert('Please generate the QR code first.');
+    }
+}
+</script>
+
+</body>
+</html>
